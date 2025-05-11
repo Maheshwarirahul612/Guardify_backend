@@ -1,0 +1,56 @@
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm/
+
+# Debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*.local
+
+# Build output
+dist/
+build/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# TypeScript
+*.tsbuildinfo
+
+# PM2 runtime files
+pids/
+*.pid
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Optional: ignore database or upload folders (uncomment if used)
+# uploads/
+# database/
+
+# Misc
+*.swp
+*~
