@@ -11,17 +11,16 @@ const path = require('path');
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app);
-
+const server = http.createServer(app); // Ensure we're using the HTTP server here
 const io = socketIo(server, {
   cors: {
     origin: [
-      'http://localhost:5173',          // Local frontend (development)
-      'http://192.168.175.15:8081',     // Local network (mobile)
+      'http://localhost:5173',   // Local frontend (development)
+      'http://192.168.175.15:8081', // Mobile device on local network (if testing locally)
       'https://maheshwarirahul612.github.io', // GitHub Pages frontend
     ],
-    credentials: true,
-    methods: ['GET', 'POST'],
+    credentials: true, // Allow credentials (cookies, headers, etc.)
+    methods: ['GET', 'POST'], // Allowed methods
   },
 });
 
@@ -30,7 +29,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// MongoDB Connection
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -43,23 +42,26 @@ const authRoutes = require('./routes/authRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const settingsRoutes = require('./routes/settings');
 const chatRoutes = require('./routes/chatRoutes');
-const requestRoutes = require('./routes/requestRoutes');
+const requestRoutes = require('./routes/requestRoutes'); // Add requestRoutes
 
+
+// Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/settings', settingsRoutes);
-app.use('/api/user', authRoutes); // Optional: consider removing to avoid duplicate route binding
+app.use('/api/user', authRoutes);
 app.use('/api', requestRoutes);
 app.use('/api/chat', chatRoutes);
 
-// Serve static files
+
+// Serve static files (uploaded images)
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
-// Socket.IO integration
+// Socket Setup
 socketHandler(io);
 
-// Start Server on Render-required PORT and HOST
-const PORT = process.env.PORT || 10000; // Render sets PORT automatically
+// Start the server
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server listening on http://0.0.0.0:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
