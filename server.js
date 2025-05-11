@@ -54,14 +54,6 @@ app.use('/api/user', authRoutes);
 app.use('/api', requestRoutes);
 app.use('/api/chat', chatRoutes);
 
-app.get('/', (req, res) => {
-  res.status(200).json({
-    activeStatus: true,
-    error: false,
-    message: 'Guardify backend is running'
-  });
-});
-
 
 // Serve static files (uploaded images)
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
