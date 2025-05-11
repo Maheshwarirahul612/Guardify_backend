@@ -15,7 +15,7 @@ const server = http.createServer(app); // Ensure we're using the HTTP server her
 const io = socketIo(server, {
   cors: {
     origin: [
-      'http://localhost:5173',   // Local frontend (development)
+      'http://localhost:5173',  // Local frontend (development)
       'http://192.168.175.15:8081', // Mobile device on local network (if testing locally)
       'https://maheshwarirahul612.github.io', // GitHub Pages frontend
     ],
@@ -45,7 +45,6 @@ const chatRoutes = require('./routes/chatRoutes');
 const requestRoutes = require('./routes/requestRoutes'); // Add requestRoutes
 const { error } = require('console');
 
-
 // Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/notifications', notificationRoutes);
@@ -54,7 +53,6 @@ app.use('/api/user', authRoutes);
 app.use('/api', requestRoutes);
 app.use('/api/chat', chatRoutes);
 
-
 // Serve static files (uploaded images)
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
@@ -62,7 +60,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 socketHandler(io);
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0',() => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+const PORT = process.env.PORT;  // Get port from environment variable (Render will provide it)
+if (!PORT) {
+  throw new Error('❌ PORT not specified. Make sure your environment is set correctly.');
+}
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
