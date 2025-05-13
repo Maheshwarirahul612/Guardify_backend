@@ -62,7 +62,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 socketHandler(io);
 
 // Start the server
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
