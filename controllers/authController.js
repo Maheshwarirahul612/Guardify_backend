@@ -108,7 +108,7 @@ exports.getUserProfile = async (req, res) => {
 // ✅ Update current user profile
 exports.updateUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id); // Fetch the current user based on the authenticated user ID.
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const { username, email, password, profileImage } = req.body;
@@ -116,13 +116,21 @@ exports.updateUserProfile = async (req, res) => {
     if (username) user.username = username;
     if (email) user.email = email;
     if (profileImage) user.profileImage = profileImage;
-    if (password) user.password = await bcrypt.hash(password, 10);
+    if (password) user.password = await bcrypt.hash(password, 10); // Encrypt new password if provided.
 
-    await user.save();
+    await user.save(); // Save updated user info to the database.
 
-    res.status(200).json({ message: 'Profile updated successfully' });
+    res.status(200).json({
+      message: 'Profile updated successfully!',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        profileImage: user.profileImage || null,
+      },
+    });
   } catch (error) {
-    console.error('Update profile error:', error);
+    console.error('Profile update error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -261,5 +269,34 @@ exports.uploadAvatar = async (req, res) => {
       message: 'Failed to upload avatar',
       error: error.message, // Send the error message to the frontend
     });
+  }
+};
+
+
+// ✅ Cloudinary upload logic (if updating profile image)
+exports.uploadProfileImage = async (req, res) => {
+  try {
+    // Cloudinary upload logic
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'user_profiles', // Optionally specify the folder in Cloudinary.
+    });
+
+    // Optionally remove the file from the local file system if required.
+    fs.unlinkSync(req.file.path);
+
+    // Update user's profile image in the database
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.profileImage = result.secure_url;
+    await user.save();
+
+    res.status(200).json({
+      message: 'Profile image updated successfully!',
+      profileImage: user.profileImage,
+    });
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    res.status(500).json({ message: 'Failed to upload image' });
   }
 };
