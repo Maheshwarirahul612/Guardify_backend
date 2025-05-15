@@ -16,7 +16,7 @@ cloudinary.config({
 
 // ✅ Helper: Generate JWT Token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
 // ✅ Register a new user (with optional admin role)

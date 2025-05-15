@@ -18,7 +18,7 @@ const io = socketIo(server, {
       'http://localhost:5173',
       'http://192.168.175.15:8081',
       'https://maheshwarirahul612.github.io',
-      'https://maheshwarirahul612.github.io/Guardify', // ✅ Add this
+      'https://maheshwarirahul612.github.io/Haresh_badga786', // ✅ Add this
     ],
     credentials: true, // Allow credentials (cookies, headers, etc.)
     methods: ['GET', 'POST'], // Allowed methods
